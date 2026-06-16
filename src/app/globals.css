@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0a0a;
+  --green: #00ff41;
+  --green-dim: #00cc33;
+  --green-muted: #004d14;
+  --cyan: #00e5ff;
+  --yellow: #ffd700;
+  --white: #e0e0e0;
+  --gray: #555555;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--green);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--green);
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* CRT scanlines overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  z-index: 9999;
+}
+
+/* Subtle vignette */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
+  z-index: 9998;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--green-muted);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--green-dim);
+}
+
+::selection {
+  background: var(--green-muted);
+  color: var(--green);
+}
+
+.text-green     { color: var(--green); }
+.text-green-dim { color: var(--green-dim); }
+.text-cyan      { color: var(--cyan); }
+.text-yellow    { color: var(--yellow); }
+.text-white     { color: var(--white); }
+.text-gray      { color: var(--gray); }
+
+.cmd-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--green);
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: transparent;
+  width: 100%;
+}
+
+.chip {
+  border: 1px solid var(--green-muted);
+  color: var(--green-dim);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 4px 12px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.chip:hover,
+.chip.active {
+  border-color: var(--green);
+  color: var(--green);
+  background: var(--green-muted);
+  box-shadow: 0 0 8px var(--green-muted);
+}
+
+/* Blinking cursor */
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Pixel logo glitch animation */
+@keyframes glitch {
+  0%, 85%, 100% {
+    transform: none;
+    filter: none;
+  }
+  87% {
+    transform: translateX(-3px) skewX(-2deg);
+    filter: drop-shadow(3px 0 var(--cyan));
+  }
+  89% {
+    transform: translateX(3px) skewX(2deg);
+    filter: drop-shadow(-3px 0 var(--green));
+  }
+  91% {
+    transform: translateX(-2px);
+    filter: drop-shadow(2px 0 var(--cyan)) brightness(1.4);
+  }
+  93% {
+    transform: translateX(2px);
+    filter: drop-shadow(-2px 0 var(--green));
+  }
+  95% {
+    transform: translateX(-1px);
+    filter: none;
+  }
+  97% {
+    transform: none;
+    filter: brightness(1.6);
+  }
+}
+
+.pixel-logo {
+  animation: glitch 7s ease-in-out infinite;
+}
+
+/* Green phosphor glow on active text */
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  97%            { opacity: 0.85; }
+  98%            { opacity: 1; }
+  99%            { opacity: 0.9; }
+}
+
+/* Smooth color theme transitions */
+*, *::before, *::after {
+  transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Override transition for inputs to stay snappy */
+input, canvas {
+  transition: none !important;
+}
